@@ -1,0 +1,41 @@
+server:
+  port: 8081
+
+
+
+#database connection
+spring:
+  security:
+    user:
+      name: admin
+      password: 112233
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_app
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+#      pool-name: HikariCP
+#      maximum-pool-size: 5
+#      connection-timeout: 10000
+#      idle-timeout: 600000
+#      max-lifetime: 1800000
+#      validation-timeout: 1800000
+#      leak-detection-threshold: 0
+      initialization-fail-timeout: 0
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+
+#      DIALECT AUTO DETECTED
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
