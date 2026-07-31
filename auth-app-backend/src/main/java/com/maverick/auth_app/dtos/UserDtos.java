@@ -17,14 +17,14 @@ import java.util.UUID;
 @Builder
 public class UserDtos {
     private UUID id;
-    private String emailId;
+    private String email;
     private String name;
     private String password;
     private String image;
-    private boolean enable;
+    private Boolean enable;
     private Instant createdAt = Instant.now();
     private Instant updatedAt = Instant.now();
     private Provider provider = Provider.LOCAL;
-    private Set<RoleDtos> role = new HashSet<>();
+    private Set<RoleDtos> roles = new HashSet<>();
 
 }

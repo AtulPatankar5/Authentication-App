@@ -13,13 +13,13 @@ public interface UserService {
     UserDtos getUserByEmail(String email);
 
     //    Update User
-    UserDtos updateUser(UserDtos userDtos, UUID userId);
+    UserDtos updateUser(UserDtos userDtos, String userId);
 
     //Delete user
-    void deleteUser(UUID userId);
+    void deleteUser(String userId);
 
     //    Get User by ID
-    UserDtos getUserById(UUID userId);
+    UserDtos getUserById(String userId);
 
     //get all user
     Iterable<UserDtos> getAllUsers();
