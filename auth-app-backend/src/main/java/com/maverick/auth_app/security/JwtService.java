@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Getter
+@Setter
 public class JwtService {
 
     private final SecretKey key;
@@ -44,7 +48,7 @@ public class JwtService {
 
 
     //Generate Access Token code write
-    public String generatAccessToken(User user) {
+    public String generateAccessToken(User user) {
         Instant now = Instant.now();
         List<String> roles = user.getRoles() == null ? List.of() :
                 user.getRoles().stream().map(Role::getName).toList();
@@ -64,7 +68,7 @@ public class JwtService {
     }
 
     //Generate Refresh Token code write
-    public String generatRefreshToken(User user, String jti) {
+    public String generateRefreshToken(User user, String jti) {
         Instant now = Instant.now();
 
         return Jwts.builder().
