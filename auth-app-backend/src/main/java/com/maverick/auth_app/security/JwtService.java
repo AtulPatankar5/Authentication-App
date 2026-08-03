@@ -77,7 +77,7 @@ public class JwtService {
                 issuer(issuer).
                 issuedAt(Date.from(now)).
                 expiration((Date.from(now.plusSeconds(refreshTtlSeconds)))).
-                claim("typ", "access").
+                claim("typ", "refresh").
                 signWith(key, Jwts.SIG.HS512).
                 compact();
     }
