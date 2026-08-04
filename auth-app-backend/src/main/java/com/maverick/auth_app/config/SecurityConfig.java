@@ -15,14 +15,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
     public JwtAuthentictionFilter jwtAuthentictionFilter;
+    public AuthenticationSuccessHandler successHandler;
+
+    public SecurityConfig(JwtAuthentictionFilter jwtAuthentictionFilter, AuthenticationSuccessHandler successHandler) {
+        this.jwtAuthentictionFilter = jwtAuthentictionFilter;
+        this.successHandler = successHandler;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,6 +41,10 @@ public class SecurityConfig {
                         authorizeRequest.requestMatchers("/api/v1/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
+                .oauth2Login(oauth2 ->
+                        oauth2.
+                                successHandler(successHandler).
+                                failureHandler(null))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
                     authException.printStackTrace();
                     response.setStatus(401);

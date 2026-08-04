@@ -35,9 +35,22 @@ spring:
 
 
 
+
+
 #      DIALECT AUTO DETECTED
 
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:test-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:test-client-secret}
+            scope:
+              - email
+              - profile
+              - openid
 security:
   jwt:
     secret: ${JWT_SECRET:Q8mX2vLp9RtY5NkWa3JhZ7UcPdE4FsBgLmV1CyHxKoTi6QrNe8AwJuXfMsDbPzYg}
