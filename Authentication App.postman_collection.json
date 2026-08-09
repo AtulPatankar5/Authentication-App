@@ -1,319 +1,319 @@
 {
-	"info": {
-		"_postman_id": "fe582b1f-35ca-4efe-829e-d8f682f22a12",
-		"name": "Authentication App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24295309",
-		"_collection_link": "https://blue-meadow-929102.postman.co/workspace/MyWorkspace1~b7b0d5db-13df-4d57-a3bd-652a7af6d5f2/collection/24295309-fe582b1f-35ca-4efe-829e-d8f682f22a12?action=share&source=collection_link&creator=24295309"
-	},
-	"item": [
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get User By Email",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/api/v1/user/get-user/email?emailId=atul.patankar@gmaill.com",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"get-user",
-								"email"
-							],
-							"query": [
-								{
-									"key": "emailId",
-									"value": "atul.patankar@gmaill.com"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get User By UserId",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/api/v1/user/get-user?userId=d7dd6618-9e87-422d-b5d6-10d4d1fffd52",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"get-user"
-							],
-							"query": [
-								{
-									"key": "userId",
-									"value": "d7dd6618-9e87-422d-b5d6-10d4d1fffd52"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create User",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"atul.patankar2@gmaill.com\",\r\n  \"name\": \"Atul Patankar\",\r\n  \"password\": \"atul@123\",\r\n  \"image\": \"https://images.unsplash.com/photo-1500648767791-00dcc994a43e\",\r\n  \"enable\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/api/v1/user/create-user",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"create-user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete user By UserId",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/api/v1/user/delete-user?userId=010566c5-3f8f-4d32-bc52-a98a6a25fe4b",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"delete-user"
-							],
-							"query": [
-								{
-									"key": "userId",
-									"value": "010566c5-3f8f-4d32-bc52-a98a6a25fe4b"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get all Users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/api/v1/user/get-allUsers",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"get-allUsers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update User By UserId",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"atul.patankar@fortytwolabs.com\",\r\n  \"name\": \"Atul Santosh Patankar\",\r\n  \"password\": \"Atul@Aa123\",\r\n  \"image\": \"https://images.splash.com/photo-1500648767791-00dcc994a43e\",\r\n  \"enable\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/api/v1/user/update-user?userId=d7dd6618-9e87-422d-b5d6-10d4d1fffd52",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"update-user"
-							],
-							"query": [
-								{
-									"key": "userId",
-									"value": "d7dd6618-9e87-422d-b5d6-10d4d1fffd52"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Authentication",
-			"item": [
-				{
-					"name": "Register User",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"aish@gmail.com\",\r\n    \"name\": \"Aishwariya Rai\",\r\n    \"password\": \"112233\",\r\n    \"image\": \"https://images.unsplash2.com/photo-1ds5sd00648767791-00dcc994a43e\",\r\n    \"enable\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/api/v1/auth/register",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"atul@gmail.com\",\r\n    \"password\": \"112233\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/api/v1/auth/login",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Refresh",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/api/v1/auth/refresh",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"refresh"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "logout",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"Comatoze@gmail.com\",\r\n    \"password\": \"112233\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/api/v1/auth/logout",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"logout"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "fe582b1f-35ca-4efe-829e-d8f682f22a12",
+    "name": "Authentication App",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "24295309",
+    "_collection_link": "https://go.postman.co/collection/24295309-fe582b1f-35ca-4efe-829e-d8f682f22a12?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User By Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8081/api/v1/user/get-user/email?emailId=atul.patankar@gmaill.com",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "get-user",
+                "email"
+              ],
+              "query": [
+                {
+                  "key": "emailId",
+                  "value": "atul.patankar@gmaill.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By UserId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8081/api/v1/user/get-user?userId=d7dd6618-9e87-422d-b5d6-10d4d1fffd52",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "get-user"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "d7dd6618-9e87-422d-b5d6-10d4d1fffd52"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"atul.patankar2@gmaill.com\",\r\n  \"name\": \"Atul Patankar\",\r\n  \"password\": \"atul@123\",\r\n  \"image\": \"https://images.unsplash.com/photo-1500648767791-00dcc994a43e\",\r\n  \"enable\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/user/create-user",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "create-user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user By UserId",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8081/api/v1/user/delete-user?userId=010566c5-3f8f-4d32-bc52-a98a6a25fe4b",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "delete-user"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "010566c5-3f8f-4d32-bc52-a98a6a25fe4b"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8081/api/v1/user/get-allUsers",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "get-allUsers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User By UserId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"atul.patankar@fortytwolabs.com\",\r\n  \"name\": \"Atul Santosh Patankar\",\r\n  \"password\": \"Atul@Aa123\",\r\n  \"image\": \"https://images.splash.com/photo-1500648767791-00dcc994a43e\",\r\n  \"enable\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/user/update-user?userId=d7dd6618-9e87-422d-b5d6-10d4d1fffd52",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "update-user"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "d7dd6618-9e87-422d-b5d6-10d4d1fffd52"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"aish@gmail.com\",\r\n    \"name\": \"Aishwariya Rai\",\r\n    \"password\": \"112233\",\r\n    \"image\": \"https://images.unsplash2.com/photo-1ds5sd00648767791-00dcc994a43e\",\r\n    \"enable\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/auth/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"atul@gmail.com\",\r\n    \"password\": \"112233\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/auth/refresh",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"Comatoze@gmail.com\",\r\n    \"password\": \"112233\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8081/api/v1/auth/logout",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }
