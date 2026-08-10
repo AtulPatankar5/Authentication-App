@@ -53,9 +53,10 @@ spring:
               - profile
               - openid
           github:
-            client-id: ${GITHUB_CLIENT_ID:test-client-id}
-            client-secret: ${GITHUB_CLIENT_SECRET:test-client-secret}
+            client-id: ${GITHUB_CLIENT_ID:test-client-id} #Ov23li4WG01291u4mLfk
+            client-secret: ${GITHUB_CLIENT_SECRET:test-client-secret} #ba072d15514cc5438b100ca181f66697f63ee193
             #/login/oauth2/code/github
+#            run using this to connect -> http://localhost:8081/oauth2/authorization/github
             scope:
               - user:email
               - read:user
