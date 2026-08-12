@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
+    CloudCog,
     Eye,
     EyeOff,
     Sparkles,
@@ -16,45 +17,78 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import toast from "react-hot-toast";
+import type RegisterData from "@/types/Register";
+import { RegisterUserService } from "@/services/AuthService";
+import { useNavigate } from "react-router";
 
-interface RegisterData {
-    name: string;
-    email: string;
-    password: string;
-}
+
 export default function Signup() {
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const [data, setData] = useState({
+    const [data, setData] = useState<RegisterData>({
         name: "",
         email: "",
         password: ""
     });
+
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        console.log(name, value);
         setData(prev => ({
             ...prev,
             [name]: value
         }))
-        setError(null);
     }
 
-    const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+    const validateForm = () => {
+        const requiredFields = {
+            name: "name",
+            email: "email",
+            password: "password",
+        };
+
+        for (const [field, label] of Object.entries(requiredFields)) {
+            const value = data[field as keyof typeof data];
+
+            if (typeof value === "string" && value.trim() === "") {
+                setError("All fields are required.");
+                toast.error(`${label} field is required.`);
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        console.log("Signup:", {
-            name: data.name,
-            email: data.email,
-            password: data.password,
-        });
+        if (!validateForm()) {
+            return;
+        }
 
-        // Add your signup API call here
+        try {
+            const res = await RegisterUserService(data);
+            console.log(res.data);
+            toast.success("User Registration Successfully")
+            setData({
+                name: "",
+                password: "",
+                email: ""
+            })
+            navigate("/signin");
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went Wrong ")
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleGoogleSignup = () => {
@@ -166,7 +200,7 @@ export default function Signup() {
                             {/* ================= Signup Form ================= */}
 
                             <form
-                                onSubmit={handleSignup}
+                                onSubmit={handleFormSubmit}
                                 className="space-y-5"
                             >
                                 {/* Name */}
@@ -181,11 +215,11 @@ export default function Signup() {
 
                                         <Input
                                             id="name"
+                                            name="name"
                                             type="text"
                                             placeholder="John Doe"
                                             value={data.name}
                                             onChange={handleInputChange}
-                                            required
                                             autoComplete="name"
                                             className="h-11 rounded-xl border-border/70 bg-background/50 pl-10 transition-all focus:border-primary/50 focus:ring-primary/20"
                                         />
@@ -201,11 +235,11 @@ export default function Signup() {
 
                                     <Input
                                         id="email"
+                                        name="email"
                                         type="email"
                                         placeholder="you@example.com"
                                         value={data.email}
                                         onChange={handleInputChange}
-                                        required
                                         autoComplete="email"
                                         className="h-11 rounded-xl border-border/70 bg-background/50 px-4 transition-all focus:border-primary/50 focus:ring-primary/20"
                                     />
@@ -221,6 +255,7 @@ export default function Signup() {
                                     <div className="relative">
                                         <Input
                                             id="password"
+                                            name='password'
                                             type={
                                                 showPassword
                                                     ? "text"
@@ -229,7 +264,6 @@ export default function Signup() {
                                             placeholder="Create a strong password"
                                             value={data.password}
                                             onChange={handleInputChange}
-                                            required
                                             minLength={8}
                                             autoComplete="new-password"
                                             className="h-11 rounded-xl border-border/70 bg-background/50 px-4 pr-11 transition-all focus:border-primary/50 focus:ring-primary/20"

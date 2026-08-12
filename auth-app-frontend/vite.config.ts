@@ -15,9 +15,6 @@ export default defineConfig({
     },
   },
   server: {
-    watch: {
-      usePolling: true,
-    },
     hmr: true,
   },
 })
