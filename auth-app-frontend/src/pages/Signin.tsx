@@ -1,199 +1,109 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
     Eye,
     EyeOff,
     Sparkles,
-    User,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 
-interface RegisterData {
-    name: string;
-    email: string;
-    password: string;
-}
-export default function Signup() {
-
+export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        password: ""
-    });
-
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        console.log(name, value);
-        setData(prev => ({
-            ...prev,
-            [name]: value
-        }))
-        setError(null);
-    }
-
-    const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log("Signup:", {
-            name: data.name,
-            email: data.email,
-            password: data.password,
+        console.log("Login:", {
+            email,
+            password,
         });
 
-        // Add your signup API call here
+        // Add your login API call here
     };
 
-    const handleGoogleSignup = () => {
-        console.log("Continue with Google");
-
-        // Example:
-        // window.location.href =
-        //     "http://localhost:8081/oauth2/authorization/google";
+    const handleGoogleLogin = () => {
+        window.location.href =
+            "http://localhost:8081/oauth2/authorization/google";
     };
 
-    const handleGithubSignup = () => {
-        console.log("Continue with GitHub");
-
-        // Example:
-        // window.location.href =
-        //     "http://localhost:8081/oauth2/authorization/github";
+    const handleGithubLogin = () => {
+        window.location.href =
+            "http://localhost:8081/oauth2/authorization/github";
     };
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-            {/* ================= Background Effects ================= */}
-
+            {/* Background Effects */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                {/* Top Left Glow */}
                 <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]" />
 
-                {/* Bottom Right Glow */}
                 <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[120px]" />
 
-                {/* Center Glow */}
                 <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[100px]" />
             </div>
 
-            {/* ================= Grid Background ================= */}
-
+            {/* Grid Background */}
             <div
                 className="pointer-events-none absolute inset-0 opacity-[0.035]"
                 style={{
                     backgroundImage: `
-                        linear-gradient(
-                            hsl(var(--foreground)) 1px,
-                            transparent 1px
-                        ),
-                        linear-gradient(
-                            90deg,
-                            hsl(var(--foreground)) 1px,
-                            transparent 1px
-                        )
+                        linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
+                        linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)
                     `,
                     backgroundSize: "40px 40px",
                 }}
             />
 
-            {/* ================= Main Content ================= */}
-
+            {/* Main Content */}
             <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
                 <motion.div
-                    initial={{
-                        opacity: 0,
-                        y: 25,
-                        scale: 0.98,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                    }}
-                    transition={{
-                        duration: 0.7,
-                    }}
+                    initial={{ opacity: 0, y: 25, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.7 }}
                     className="w-full max-w-md"
                 >
-                    {/* ================= Logo ================= */}
-
+                    {/* Logo / Brand */}
                     <motion.div
-                        initial={{
-                            opacity: 0,
-                            y: -15,
-                        }}
-                        animate={{
-                            opacity: 1,
-                            y: 0,
-                        }}
-                        transition={{
-                            delay: 0.15,
-                            duration: 0.6,
-                        }}
+                        initial={{ opacity: 0, y: -15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15, duration: 0.6 }}
                         className="mb-8 flex flex-col items-center text-center"
                     >
 
+
                         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                            Create Your Account
+                            Welcome Back
                         </h1>
 
                         <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
-                            Join the next generation of secure
-                            authentication and start building with confidence.
+                            Securely sign in to your account and continue
+                            building with the next generation of authentication.
                         </p>
                     </motion.div>
 
-                    {/* ================= Signup Card ================= */}
-
+                    {/* Login Card */}
                     <Card className="relative overflow-hidden rounded-3xl border-border/60 bg-card/60 shadow-2xl backdrop-blur-2xl">
                         {/* Top Glow */}
-
                         <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
 
-                        <CardContent className="p-6 pt-5 sm:p-8">
-                            {/* ================= Signup Form ================= */}
 
+
+                        <CardContent className="p-6 pt-5 sm:p-8">
+                            {/* Login Form */}
                             <form
-                                onSubmit={handleSignup}
+                                onSubmit={handleLogin}
                                 className="space-y-5"
                             >
-                                {/* Name */}
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="name">
-                                        Full name
-                                    </Label>
-
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-
-                                        <Input
-                                            id="name"
-                                            type="text"
-                                            placeholder="John Doe"
-                                            value={data.name}
-                                            onChange={handleInputChange}
-                                            required
-                                            autoComplete="name"
-                                            className="h-11 rounded-xl border-border/70 bg-background/50 pl-10 transition-all focus:border-primary/50 focus:ring-primary/20"
-                                        />
-                                    </div>
-                                </div>
-
                                 {/* Email */}
-
                                 <div className="space-y-2">
                                     <Label htmlFor="email">
                                         Email address
@@ -203,8 +113,10 @@ export default function Signup() {
                                         id="email"
                                         type="email"
                                         placeholder="you@example.com"
-                                        value={data.email}
-                                        onChange={handleInputChange}
+                                        value={email}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                         required
                                         autoComplete="email"
                                         className="h-11 rounded-xl border-border/70 bg-background/50 px-4 transition-all focus:border-primary/50 focus:ring-primary/20"
@@ -212,11 +124,24 @@ export default function Signup() {
                                 </div>
 
                                 {/* Password */}
-
                                 <div className="space-y-2">
-                                    <Label htmlFor="password">
-                                        Password
-                                    </Label>
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="password">
+                                            Password
+                                        </Label>
+
+                                        <button
+                                            type="button"
+                                            className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
+                                            onClick={() =>
+                                                console.log(
+                                                    "Forgot password"
+                                                )
+                                            }
+                                        >
+                                            Forgot password?
+                                        </button>
+                                    </div>
 
                                     <div className="relative">
                                         <Input
@@ -226,12 +151,13 @@ export default function Signup() {
                                                     ? "text"
                                                     : "password"
                                             }
-                                            placeholder="Create a strong password"
-                                            value={data.password}
-                                            onChange={handleInputChange}
+                                            placeholder="Enter your password"
+                                            value={password}
+                                            onChange={(e) =>
+                                                setPassword(e.target.value)
+                                            }
                                             required
-                                            minLength={8}
-                                            autoComplete="new-password"
+                                            autoComplete="current-password"
                                             className="h-11 rounded-xl border-border/70 bg-background/50 px-4 pr-11 transition-all focus:border-primary/50 focus:ring-primary/20"
                                         />
 
@@ -256,46 +182,49 @@ export default function Signup() {
                                             )}
                                         </button>
                                     </div>
-
-                                    <p className="text-xs text-muted-foreground">
-                                        Use at least 8 characters with a
-                                        combination of letters and numbers.
-                                    </p>
                                 </div>
 
-                                {/* Signup Button */}
+                                {/* Remember Me */}
+                                <div className="flex items-center gap-2">
+                                    <Checkbox id="remember" />
 
+                                    <Label
+                                        htmlFor="remember"
+                                        className="cursor-pointer text-sm font-normal text-muted-foreground"
+                                    >
+                                        Remember me
+                                    </Label>
+                                </div>
+
+                                {/* Login Button */}
                                 <Button
                                     type="submit"
                                     className="group h-11 w-full rounded-xl text-sm font-semibold shadow-lg shadow-primary/10 transition-all hover:shadow-primary/20"
                                 >
-                                    Create Account
+                                    Sign In
 
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </form>
 
-                            {/* ================= Divider ================= */}
-
+                            {/* Divider */}
                             <div className="my-7 flex items-center gap-4">
                                 <Separator className="flex-1" />
 
-                                <span className="whitespace-nowrap text-xs text-muted-foreground">
+                                <span className="text-xs text-muted-foreground">
                                     OR CONTINUE WITH
                                 </span>
 
                                 <Separator className="flex-1" />
                             </div>
 
-                            {/* ================= Social Login ================= */}
-
+                            {/* Social Login */}
                             <div className="grid grid-cols-2 gap-3">
                                 {/* Google */}
-
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={handleGoogleSignup}
+                                    onClick={handleGoogleLogin}
                                     className="h-11 rounded-xl border-border/70 bg-background/40 transition-all hover:bg-background/80"
                                 >
                                     <GoogleIcon />
@@ -305,12 +234,10 @@ export default function Signup() {
                                     </span>
                                 </Button>
 
-                                {/* GitHub */}
-
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={handleGithubSignup}
+                                    onClick={handleGithubLogin}
                                     className="h-11 rounded-xl border-border/70 bg-background/40 transition-all hover:bg-background/80"
                                 >
                                     <GithubIcon />
@@ -321,42 +248,34 @@ export default function Signup() {
                                 </Button>
                             </div>
 
-                            {/* ================= Login Link ================= */}
-
+                            {/* Sign Up */}
                             <p className="mt-7 text-center text-sm text-muted-foreground">
-                                Already have an account?{" "}
+                                Don't have an account?{" "}
                                 <button
                                     type="button"
                                     className="font-semibold text-primary hover:underline"
                                     onClick={() =>
-                                        console.log("Go to login")
+                                        console.log("Create account")
                                     }
                                 >
-                                    Sign in
+                                    Create account
                                 </button>
                             </p>
                         </CardContent>
                     </Card>
 
-                    {/* ================= Security Message ================= */}
-
+                    {/* Security Message */}
                     <motion.div
-                        initial={{
-                            opacity: 0,
-                        }}
-                        animate={{
-                            opacity: 1,
-                        }}
-                        transition={{
-                            delay: 0.8,
-                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8 }}
                         className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground"
                     >
                         <Sparkles className="h-3.5 w-3.5 text-primary" />
 
                         <span>
-                            Your account is protected with
-                            industry-standard security
+                            Your connection is secured with
+                            industry-standard encryption
                         </span>
                     </motion.div>
                 </motion.div>
@@ -365,10 +284,7 @@ export default function Signup() {
     );
 }
 
-/* =========================================================
-   Google Icon
-========================================================= */
-
+/* Google Icon */
 function GoogleIcon() {
     return (
         <svg
@@ -377,7 +293,6 @@ function GoogleIcon() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
         >
             <path
                 d="M21.805 12.23c0-.79-.07-1.55-.225-2.28H12v4.31h5.495a4.7 4.7 0 0 1-2.04 3.08v2.56h3.3c1.93-1.78 3.05-4.4 3.05-7.67Z"
@@ -395,17 +310,12 @@ function GoogleIcon() {
             />
 
             <path
-                d="M12 6.05c1.5 0 2.84.52 3.9 1.54l2.93-2.93C17.06 3.04 14.75 2 12 2a10.2 10.2 0 0 0-9.14 5.63l3.41 2.64 1.4 1.08C7.08 7.85 9.34 6.05 12 6.05Z"
+                d="M12 6.05c1.5 0 2.84.52 3.9 1.54l2.93-2.93C17.06 3.04 14.75 2 12 2a10.2 10.2 0 0 0-9.14 5.63l3.41 2.64C7.08 7.85 9.34 6.05 12 6.05Z"
                 fill="#EA4335"
             />
         </svg>
     );
 }
-
-/* =========================================================
-   GitHub Icon
-========================================================= */
-
 function GithubIcon() {
     return (
         <svg
