@@ -38,7 +38,8 @@ public class SecurityConfig {
 //                Don't create Http Session. For every request generate a JWT Token again. Server never remembers the user. JWt remembers
         sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 authorizeHttpRequests(authorizeRequest ->
-                        authorizeRequest.requestMatchers("/api/v1/auth/**").permitAll()
+                        authorizeRequest
+                                .requestMatchers(AppConstant.AUTH_PUBLIC_URLS).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 ->

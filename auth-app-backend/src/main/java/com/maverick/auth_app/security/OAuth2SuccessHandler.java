@@ -1,6 +1,5 @@
 package com.maverick.auth_app.security;
 
-
 import com.maverick.auth_app.entities.Provider;
 import com.maverick.auth_app.entities.RefreshToken;
 import com.maverick.auth_app.entities.User;
@@ -13,8 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.ConfigurationKeys;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -23,10 +24,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,6 +40,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final CookiesService cookiesService;
 
     private final RefreshTokenRepository refreshTokenRepository;
+
+    @Value("${app.auth.frontend.success-redirect}")
+    private String frontEndSuccessUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -58,25 +63,44 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         switch (registrationId) {
             case "google" -> {
                 String googleId = oAuth2User.getAttributes().getOrDefault("sub", "").toString();
-
                 String emailId = oAuth2User.getAttributes().getOrDefault("email", "").toString();
                 String name = oAuth2User.getAttributes().getOrDefault("name", "").toString();
                 String picture = oAuth2User.getAttributes().getOrDefault("picture", "").toString();
 
-                user = User
+                User newUser = User
                         .builder()
                         .email(emailId)
                         .name(name)
                         .image(picture)
                         .enable(true)
+                        .providerId(googleId)
                         .provider(Provider.GOOGLE)
                         .build();
-                userRepository.findByEmail(emailId).ifPresentOrElse(u -> {
-                    logger.info("user is already present in DB");
-                    logger.info(u.toString());
-                }, () -> {
-                    userRepository.save(user);
-                });
+
+
+                user = userRepository.findByEmail(emailId).orElseGet(() -> userRepository.save(newUser));
+
+            }
+            case "github" -> {
+                String name = oAuth2User.getAttributes().getOrDefault("login", "").toString();
+                String githubId = Objects.toString(oAuth2User.getAttribute("id"), null);
+                String image = oAuth2User.getAttributes().getOrDefault("avatar_url", "").toString();
+                String email = (String) oAuth2User.getAttribute("email");
+                if (email == null) {
+                    email = name + "@github.com";
+                }
+                User newUser = User
+                        .builder()
+                        .email(email)
+                        .name(name)
+                        .image(image)
+                        .enable(true)
+                        .providerId(githubId)
+                        .provider(Provider.GITHUB)
+                        .build();
+
+                user = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(newUser));
+
             }
             default -> {
                 throw new RuntimeException("invalid registration Id");
@@ -98,5 +122,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         cookiesService.attachRefreshCookie(response, refreshToken, (int) jwtService.getRefreshTtlSeconds());
         response.getWriter().write("Login SuccessFull");
+
+        response.sendRedirect(frontEndSuccessUrl);
+
     }
 }
