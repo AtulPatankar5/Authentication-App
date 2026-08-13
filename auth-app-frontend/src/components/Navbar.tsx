@@ -8,7 +8,7 @@ export default function Navbar() {
 
                 <span className="text-center h-6 w-6 rounded-md bg-gradient-to-r from-primary to-primary/40"><img src="../../public/auth-icon.png" alt="" /> </span>
                 <NavLink to={"/"}>
-                    <span>Auth App</span>
+                    <span>Auth Core</span>
                 </NavLink>
             </div>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
+    AlertCircleIcon,
     ArrowRight,
     Eye,
     EyeOff,
@@ -13,23 +14,85 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import type LoginData from "@/types/LoginData";
+import toast from "react-hot-toast";
+import { LoginUserService } from "@/services/AuthService";
+import { useNavigate } from "react-router";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
 
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    const [data, setData] = useState<LoginData>({
+        email: "",
+        password: ""
+    })
+    const isFormInvalid =
+        !data.email.trim() ||
+        !data.password.trim();
+
+
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const navigate = useNavigate();
+    const validateForm = () => {
+        const requiredFields = {
+            password: "password",
+            email: "email",
+        };
+
+        for (const [field, label] of Object.entries(requiredFields)) {
+            const value = data[field as keyof typeof data];
+
+            if (typeof value === "string" && value.trim() === "") {
+                setError("All fields are required.");
+                toast.error(`${label} field is required.`);
+                return false;
+            }
+        }
+
+        return true;
+    }
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
 
-        console.log("Login:", {
-            email,
-            password,
-        });
+        if (!validateForm()) {
+            setLoading(false);
+            return;
+        }
+        try {
+            const res = await LoginUserService(data);
+            toast.success("User LoggedIn Successfully");
+            // console.log(res);
+            navigate("/dashboard")
 
-        // Add your login API call here
+        } catch (error: any) {
+            if (error.response) {
+                // toast.error(error.response.data.message);
+                setError(error.response.data.message);
+            } else {
+                toast.error("Network Error!! ");
+            }
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+        }
+        finally {
+            setLoading(false);
+        }
     };
 
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
     const handleGoogleLogin = () => {
         window.location.href =
             "http://localhost:8081/oauth2/authorization/google";
@@ -83,11 +146,6 @@ export default function Login() {
                         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                             Welcome Back
                         </h1>
-
-                        <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
-                            Securely sign in to your account and continue
-                            building with the next generation of authentication.
-                        </p>
                     </motion.div>
 
                     {/* Login Card */}
@@ -100,7 +158,7 @@ export default function Login() {
                         <CardContent className="p-6 pt-5 sm:p-8">
                             {/* Login Form */}
                             <form
-                                onSubmit={handleLogin}
+                                onSubmit={handleSubmit}
                                 className="space-y-5"
                             >
                                 {/* Email */}
@@ -113,11 +171,9 @@ export default function Login() {
                                         id="email"
                                         type="email"
                                         placeholder="you@example.com"
-                                        value={email}
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                        required
+                                        value={data.email}
+                                        name="email"
+                                        onChange={handleInputChange}
                                         autoComplete="email"
                                         className="h-11 rounded-xl border-border/70 bg-background/50 px-4 transition-all focus:border-primary/50 focus:ring-primary/20"
                                     />
@@ -146,17 +202,15 @@ export default function Login() {
                                     <div className="relative">
                                         <Input
                                             id="password"
+                                            name="password"
                                             type={
                                                 showPassword
                                                     ? "text"
                                                     : "password"
                                             }
                                             placeholder="Enter your password"
-                                            value={password}
-                                            onChange={(e) =>
-                                                setPassword(e.target.value)
-                                            }
-                                            required
+                                            value={data.password}
+                                            onChange={handleInputChange}
                                             autoComplete="current-password"
                                             className="h-11 rounded-xl border-border/70 bg-background/50 px-4 pr-11 transition-all focus:border-primary/50 focus:ring-primary/20"
                                         />
@@ -199,12 +253,28 @@ export default function Login() {
                                 {/* Login Button */}
                                 <Button
                                     type="submit"
+                                    disabled={isFormInvalid || loading}
                                     className="group h-11 w-full rounded-xl text-sm font-semibold shadow-lg shadow-primary/10 transition-all hover:shadow-primary/20"
                                 >
-                                    Sign In
-
-                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    {
+                                        loading ? <>
+                                            Signing In <Spinner />
+                                        </>
+                                            :
+                                            <>
+                                                Sign In
+                                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                            </>
+                                    }
                                 </Button>
+                                {
+                                    error &&
+
+                                    <Alert variant="destructive" className="max-w-md flex justify-center">
+                                        <AlertCircleIcon />
+                                        <AlertTitle>{error}</AlertTitle>
+                                    </Alert>
+                                }
                             </form>
 
                             {/* Divider */}

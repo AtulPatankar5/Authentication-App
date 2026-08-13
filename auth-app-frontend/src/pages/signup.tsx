@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
+    AlertCircleIcon,
     ArrowRight,
     CloudCog,
     Eye,
@@ -18,9 +19,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import toast from "react-hot-toast";
-import type RegisterData from "@/types/Register";
+import type RegisterData from "@/types/RegisterData";
 import { RegisterUserService } from "@/services/AuthService";
 import { useNavigate } from "react-router";
+import { Spinner } from "@/components/ui/spinner";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 
 export default function Signup() {
@@ -32,6 +35,11 @@ export default function Signup() {
         email: "",
         password: ""
     });
+
+    const isFormInvalid =
+        !data.name.trim() ||
+        !data.email.trim() ||
+        !data.password.trim();
 
     const navigate = useNavigate();
 
@@ -68,7 +76,7 @@ export default function Signup() {
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setLoading(true);
         if (!validateForm()) {
             return;
         }
@@ -83,11 +91,18 @@ export default function Signup() {
                 email: ""
             })
             navigate("/signin");
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went Wrong ")
+        } catch (error: any) {
+            if (error.response) {
+                // toast.error(error.response.data.message);
+                setError(error.response.data.message);
+            } else {
+                toast.error("Network Error!! ");
+            }
         } finally {
             setLoading(false);
+            setTimeout(() => {
+                setError("");
+            }, 3000);
         }
     };
 
@@ -182,11 +197,6 @@ export default function Signup() {
                         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                             Create Your Account
                         </h1>
-
-                        <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
-                            Join the next generation of secure
-                            authentication and start building with confidence.
-                        </p>
                     </motion.div>
 
                     {/* ================= Signup Card ================= */}
@@ -264,7 +274,6 @@ export default function Signup() {
                                             placeholder="Create a strong password"
                                             value={data.password}
                                             onChange={handleInputChange}
-                                            minLength={8}
                                             autoComplete="new-password"
                                             className="h-11 rounded-xl border-border/70 bg-background/50 px-4 pr-11 transition-all focus:border-primary/50 focus:ring-primary/20"
                                         />
@@ -300,13 +309,31 @@ export default function Signup() {
                                 {/* Signup Button */}
 
                                 <Button
+                                    disabled={isFormInvalid || loading}
                                     type="submit"
                                     className="group h-11 w-full rounded-xl text-sm font-semibold shadow-lg shadow-primary/10 transition-all hover:shadow-primary/20"
                                 >
-                                    Create Account
+                                    {
+                                        loading ?
+                                            <>
+                                                Signing Up <Spinner />
+                                            </>
+                                            :
+                                            <>
+                                                Create Account
+                                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                            </>
+                                    }
 
-                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
+
+                                {
+                                    error &&
+                                    <Alert variant="destructive" className="max-w-md flex justify-center">
+                                        <AlertCircleIcon />
+                                        <AlertTitle>{error}</AlertTitle>
+                                    </Alert>
+                                }
                             </form>
 
                             {/* ================= Divider ================= */}

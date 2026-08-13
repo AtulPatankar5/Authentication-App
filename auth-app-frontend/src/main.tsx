@@ -5,8 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import RootLayout from './pages/RootLayout';
 import About from './pages/About';
 import Services from './pages/Services';
-import Signup from './pages/Signup';
 import Signin from './pages/Signin';
+import UserDashboard from './pages/Users/UserDashboard';
+import Signup from './pages/signup';
 
 
 createRoot(document.getElementById('root')!).render(
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
       </Route>
+      <Route path="/dashboard" element={<UserDashboard />} />
 
     </Routes>
   </BrowserRouter>,
