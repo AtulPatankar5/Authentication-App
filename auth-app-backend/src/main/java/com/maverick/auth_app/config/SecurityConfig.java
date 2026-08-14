@@ -46,6 +46,8 @@ public class SecurityConfig {
         sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
+                                // Allow CORS preflight requests
+                                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(AppConstant.AUTH_PUBLIC_URLS).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -91,9 +93,12 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        String[] urls = corsUrls.trim().split(",");
+        List<String> origins = Arrays.stream(corsUrls.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isBlank())
+                .toList();
 
-        config.setAllowedOrigins(Arrays.asList(urls));
+        config.setAllowedOrigins(origins);
 
         config.setAllowedMethods(List.of(
                 "GET",

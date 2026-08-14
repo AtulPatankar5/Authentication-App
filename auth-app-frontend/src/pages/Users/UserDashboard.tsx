@@ -23,9 +23,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import useAuth from "@/auth/store";
+import { useNavigate } from "react-router";
 
 export default function UserDashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
+
+    const { authStatus, user, logout } = useAuth();
+
+    const navigate = useNavigate();
 
     const stats = [
         {
@@ -216,11 +222,11 @@ export default function UserDashboard() {
 
                                 <div className="min-w-0 flex-1">
                                     <p className="truncate text-sm font-medium">
-                                        Atul
+                                        {user?.name}
                                     </p>
 
                                     <p className="truncate text-xs text-muted-foreground">
-                                        admin@example.com
+                                        {user?.email}
                                     </p>
                                 </div>
 
@@ -286,10 +292,18 @@ export default function UserDashboard() {
                                     <User className="h-3.5 w-3.5 text-primary" />
                                 </div>
 
-                                <span className="text-sm">Atul</span>
+                                <span className="text-sm">{user.name}</span>
 
                                 <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
                             </Button>
+                            {authStatus && <Button className="flex cursor-pointer items-center gap-1 hover:text-foreground" onClick={() => {
+                                logout()
+                                navigate("/");
+                            }
+                            }>
+                                <LogOut className="h-3.5 w-3.5" />
+                                Sign out
+                            </Button>}
                         </div>
                     </header>
 
@@ -311,7 +325,7 @@ export default function UserDashboard() {
                                     </p>
 
                                     <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                                        Good afternoon, Atul
+                                        Good afternoon, {user.name}
                                     </h1>
 
                                     <p className="mt-2 text-sm text-muted-foreground">
@@ -721,10 +735,7 @@ export default function UserDashboard() {
                                     All systems operational
                                 </span>
 
-                                <button className="flex items-center gap-1 hover:text-foreground">
-                                    <LogOut className="h-3.5 w-3.5" />
-                                    Sign out
-                                </button>
+
                             </div>
 
                         </div>

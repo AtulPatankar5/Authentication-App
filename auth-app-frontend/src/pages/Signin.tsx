@@ -20,6 +20,7 @@ import { LoginUserService } from "@/services/AuthService";
 import { useNavigate } from "react-router";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
+import useAuth from "@/auth/store";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -32,6 +33,7 @@ export default function Login() {
         !data.email.trim() ||
         !data.password.trim();
 
+    const login = useAuth((state) => state.login);
 
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -64,7 +66,8 @@ export default function Login() {
             return;
         }
         try {
-            const res = await LoginUserService(data);
+            await login(data);
+            // const res = await LoginUserService(data);
             toast.success("User LoggedIn Successfully");
             // console.log(res);
             navigate("/dashboard")
