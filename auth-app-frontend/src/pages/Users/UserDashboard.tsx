@@ -180,6 +180,7 @@ export default function UserDashboard() {
                                 <SidebarItem
                                     icon={Users}
                                     label="Users"
+                                    onClick={() => navigate("/user/all-users")}
                                 />
 
                                 <SidebarItem
@@ -214,27 +215,28 @@ export default function UserDashboard() {
                         </div>
 
                         {/* User */}
-                        <div className="border-t border-border/50 p-4">
-                            <div className="flex items-center gap-3 rounded-xl bg-background/40 p-3">
-                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15">
-                                    <User className="h-4 w-4 text-primary" />
-                                </div>
-
-                                <div className="min-w-0 flex-1">
-                                    <p className="truncate text-sm font-medium">
-                                        {user?.name}
-                                    </p>
-
-                                    <p className="truncate text-xs text-muted-foreground">
-                                        {user?.email}
-                                    </p>
-                                </div>
-
-                                <button className="text-muted-foreground hover:text-foreground">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </button>
+                        {/* <div className="border-t border-border/50 p-4"> */}
+                        <div
+                            onClick={() => navigate("/user/profile")}
+                            className="flex cursor-pointer items-center gap-3 rounded-xl bg-background/40 p-3 transition-colors hover:bg-background/70"
+                        >
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15">
+                                <User className="h-4 w-4 text-primary" />
                             </div>
+
+                            <div className="min-w-0 flex-1">
+                                <p className="truncate text-sm font-medium">
+                                    {user?.name}
+                                </p>
+
+                                <p className="truncate text-xs text-muted-foreground">
+                                    {user?.email}
+                                </p>
+                            </div>
+
+                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
                         </div>
+                        {/* </div> */}
                     </div>
                 </motion.aside>
 
@@ -286,7 +288,8 @@ export default function UserDashboard() {
                             {/* User */}
                             <Button
                                 variant="ghost"
-                                className="hidden gap-2 rounded-xl sm:flex"
+                                className="hidden gap-2 rounded-xl sm:flex cursor-pointer"
+                                onClick={() => navigate("/user/profile")}
                             >
                                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/15">
                                     <User className="h-3.5 w-3.5 text-primary" />
@@ -294,7 +297,7 @@ export default function UserDashboard() {
 
                                 <span className="text-sm">{user.name}</span>
 
-                                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                                {/* <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> */}
                             </Button>
                             {authStatus && <Button className="flex cursor-pointer items-center gap-1 hover:text-foreground" onClick={() => {
                                 logout()
@@ -756,15 +759,18 @@ interface SidebarItemProps {
     icon: React.ElementType;
     label: string;
     active?: boolean;
+    onClick?: () => void;
 }
 
 function SidebarItem({
     icon: Icon,
     label,
     active = false,
+    onClick,
 }: SidebarItemProps) {
     return (
         <button
+            onClick={onClick}
             className={`group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${active
                 ? "bg-primary/10 font-medium text-primary"
                 : "text-muted-foreground hover:bg-background/60 hover:text-foreground"
@@ -776,15 +782,14 @@ function SidebarItem({
                     : "text-muted-foreground group-hover:text-foreground"
                     }`}
             />
-
             <span>{label}</span>
-
             {active && (
                 <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
             )}
         </button>
     );
 }
+
 
 
 /* -------------------------------- */

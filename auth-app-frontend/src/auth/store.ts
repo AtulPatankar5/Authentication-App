@@ -2,6 +2,7 @@ import { LoginUserService, LogoutUserService } from '@/services/AuthService';
 import type LoginData from '@/types/LoginData';
 import type LoginResponseData from '@/types/LoginResponseData';
 import type User from '@/types/User';
+import { set } from 'date-fns';
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -17,6 +18,13 @@ type AuthState = {
     login: (data: LoginData) => Promise<LoginResponseData>;
     logout: (silent?: boolean) => void;
     checkLogin: () => boolean | undefined;
+
+    changeLocalLoginData?: (
+        accessToken: string,
+        user: User,
+        authStatus: boolean,
+        authLoading: boolean
+    ) => void
 }
 
 const useAuth = create<AuthState>()(
@@ -57,10 +65,19 @@ const useAuth = create<AuthState>()(
             } else {
                 return false;
             }
+        },
+        changeLocalLoginData: (accessToken, user, authStatus, authLoading) => {
+            set({
+                accessToken: accessToken,
+                user: user,
+                authStatus: authStatus,
+                authLoading: authLoading
+            });
         }
     }), {
         name: TOKEN_KEY
     }),
+
 )
 
 export default useAuth;

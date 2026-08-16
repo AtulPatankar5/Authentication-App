@@ -70,7 +70,7 @@ export default function Login() {
             // const res = await LoginUserService(data);
             toast.success("User LoggedIn Successfully");
             // console.log(res);
-            navigate("/dashboard")
+            navigate("/user/dashboard")
 
         } catch (error: any) {
             if (error.response) {

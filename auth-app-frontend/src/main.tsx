@@ -8,6 +8,9 @@ import Services from './pages/Services';
 import Signin from './pages/Signin';
 import UserDashboard from './pages/Users/UserDashboard';
 import Signup from './pages/signup';
+import UserLayout from './pages/Users/UserLayout';
+import UserProfile from './pages/Users/UserProfile';
+import UsersList from './pages/Users/UsersList';
 
 
 createRoot(document.getElementById('root')!).render(
@@ -15,12 +18,16 @@ createRoot(document.getElementById('root')!).render(
     <Routes>
       <Route path="/" element={<RootLayout />}>
         <Route index element={<App />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/service" element={<Services />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="about" element={<About />} />
+        <Route path="service" element={<Services />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="signin" element={<Signin />} />
       </Route>
-      <Route path="/dashboard" element={<UserDashboard />} />
+      <Route path="/user" element={<UserLayout />}>
+        <Route path="dashboard" element={<UserDashboard />} />
+        <Route path="profile" element={<UserProfile />} />
+        <Route path="all-users" element={<UsersList />} />
+      </Route>
 
     </Routes>
   </BrowserRouter>,
