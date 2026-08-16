@@ -46,7 +46,12 @@ public class JwtAuthentictionFilter extends OncePerRequestFilter {
 
 //        Read Authorization header
         String header = request.getHeader("Authorization");
-        logger.info("Authorization header=>" + header);
+        logger.info(
+                "Request: {} {} | Authorization: {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                header
+        );
         //Check whether token exists
         if (header != null && header.startsWith("Bearer ")) {
 //            Extract JWT

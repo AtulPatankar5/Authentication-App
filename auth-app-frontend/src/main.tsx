@@ -11,6 +11,8 @@ import Signup from './pages/signup';
 import UserLayout from './pages/Users/UserLayout';
 import UserProfile from './pages/Users/UserProfile';
 import UsersList from './pages/Users/UsersList';
+import OAuthSuccess from './pages/OAuthSuccess';
+import OAuthFailure from './pages/OAuthFailure';
 
 
 createRoot(document.getElementById('root')!).render(
@@ -28,7 +30,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="profile" element={<UserProfile />} />
         <Route path="all-users" element={<UsersList />} />
       </Route>
-
+      <Route path="oauth/success" element={<OAuthSuccess />} />
+      <Route path="oauth/failure" element={<OAuthFailure />} />
     </Routes>
   </BrowserRouter>,
 )

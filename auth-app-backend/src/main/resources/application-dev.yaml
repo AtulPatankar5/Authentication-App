@@ -45,7 +45,6 @@ spring:
       client:
         registration:
           google:
-            #SPRING_PROFILES_ACTIVE=dev;GOOGLE_CLIENT_ID=991310292059-s7etv2ubuhi27nnkgg7idludeupojkhr:apps:googleusercontent:com;GOOGLE_CLIENT_SECRET=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;GITHUB_CLIENT_ID=Ov23li4WG01291u4mLfk;GITHUB_CLIENT_SECRET=ba072d15514cc5438b100ca181f66697f63ee193:
             client-id: ${GOOGLE_CLIENT_ID:test-client-id}
             client-secret: ${GOOGLE_CLIENT_SECRET:test-client-secret}
             #/login/oauth2/code/google
@@ -81,8 +80,8 @@ app:
     front-end-url: http://localhost:5173,http://localhost:5174
   auth:
     frontend:
-      success-redirect: http://localhost:5173/auth/success
-      failure-redirect: http://localhost:5173/auth/failure
+      success-redirect: http://localhost:5173/oauth/success
+      failure-redirect: http://localhost:5173/oauth/failure
 logging:
   level:
     org.hibernate.SQL: DEBUG

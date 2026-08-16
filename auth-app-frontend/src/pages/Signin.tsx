@@ -97,13 +97,13 @@ export default function Login() {
         }))
     }
     const handleGoogleLogin = () => {
-        window.location.href =
-            "http://localhost:8081/oauth2/authorization/google";
+        window.location.href = import.meta.env.VITE_BASE_URL || "http://localhost:8081"
+            + "/oauth2/authorization/google";
     };
 
     const handleGithubLogin = () => {
-        window.location.href =
-            "http://localhost:8081/oauth2/authorization/github";
+        window.location.href = import.meta.env.VITE_BASE_URL || "http://localhost:8081"
+            + "/oauth2/authorization/github";
     };
 
     return (

@@ -105,21 +105,14 @@ export default function Signup() {
             }, 3000);
         }
     };
-
-    const handleGoogleSignup = () => {
-        console.log("Continue with Google");
-
-        // Example:
-        // window.location.href =
-        //     "http://localhost:8081/oauth2/authorization/google";
+    const handleGoogleLogin = () => {
+        window.location.href = import.meta.env.VITE_BASE_URL || "http://localhost:8081"
+            + "/oauth2/authorization/google";
     };
 
-    const handleGithubSignup = () => {
-        console.log("Continue with GitHub");
-
-        // Example:
-        // window.location.href =
-        //     "http://localhost:8081/oauth2/authorization/github";
+    const handleGithubLogin = () => {
+        window.location.href = import.meta.env.VITE_BASE_URL || "http://localhost:8081"
+            + "/oauth2/authorization/github";
     };
 
     return (
@@ -356,7 +349,7 @@ export default function Signup() {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={handleGoogleSignup}
+                                    onClick={handleGoogleLogin}
                                     className="h-11 rounded-xl border-border/70 bg-background/40 transition-all hover:bg-background/80"
                                 >
                                     <GoogleIcon />
@@ -371,7 +364,7 @@ export default function Signup() {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={handleGithubSignup}
+                                    onClick={handleGithubLogin}
                                     className="h-11 rounded-xl border-border/70 bg-background/40 transition-all hover:bg-background/80"
                                 >
                                     <GithubIcon />
