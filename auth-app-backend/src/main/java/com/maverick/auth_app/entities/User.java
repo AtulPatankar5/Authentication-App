@@ -31,7 +31,9 @@ public class User implements UserDetails {
 
     private String password;
     private String image;
-    private Boolean enable;
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean enable = true;
     private Instant createdAt = Instant.now();
     private Instant updatedAt = Instant.now();
 
@@ -40,6 +42,7 @@ public class User implements UserDetails {
 
     private String providerId;
 
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

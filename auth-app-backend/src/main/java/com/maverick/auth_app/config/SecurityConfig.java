@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     public JwtAuthentictionFilter jwtAuthentictionFilter;
@@ -50,6 +53,8 @@ public class SecurityConfig {
                                 // Allow CORS preflight requests
                                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(AppConstant.AUTH_PUBLIC_URLS).permitAll()
+                                .requestMatchers(HttpMethod.GET).hasRole(AppConstant.GUEST_ROLE)   // Only users with the GUEST role can access GET requests
+                                .requestMatchers("/api/v1/user/**").hasRole(AppConstant.ADMIN_ROLE)   // All endpoints under /api/v1/user/** can be accessed only by ADMIN
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 ->
@@ -57,21 +62,35 @@ public class SecurityConfig {
                                 successHandler(successHandler).
                                 failureHandler(null))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
-                    authException.printStackTrace();
-                    response.setStatus(401);
-                    response.setContentType("application/json");
-                    String message = authException.getMessage();
+                                    authException.printStackTrace();
+                                    response.setStatus(401);
+                                    response.setContentType("application/json");
+                                    String message = authException.getMessage();
 
-                    String error = (String) request.getAttribute("error");
-                    if (error != null) {
-                        message = error;
-                    }
+                                    String error = (String) request.getAttribute("error");
+                                    if (error != null) {
+                                        message = error;
+                                    }
 
 //                    Map<String, String> errorMap = Map.of("message", message, "Status Code", Integer.toString(401));
-                    var apiError = ApiErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized Access", message, request.getRequestURI().toString());
-                    var objectMapper = new ObjectMapper();
-                    response.getWriter().write(objectMapper.writeValueAsString(apiError));
-                }))
+                                    var apiError = ApiErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized Access", message, request.getRequestURI().toString());
+                                    var objectMapper = new ObjectMapper();
+                                    response.getWriter().write(objectMapper.writeValueAsString(apiError));
+                                })
+                                .accessDeniedHandler((request, response, exception) -> {
+                                    response.setStatus(403);
+                                    response.setContentType("application/json");
+                                    String message = exception.getMessage();
+                                    String error = (String) request.getAttribute("error");
+                                    if (error != null) {
+                                        message = error;
+                                    }
+                                    var apiError = ApiErrorResponse.of(HttpStatus.FORBIDDEN.value(), "FORBIDDEN Access", message, request.getRequestURI());
+                                    var objectMapper = new ObjectMapper();
+                                    response.getWriter().write(objectMapper.writeValueAsString(apiError));
+
+                                })
+                )
 //        Register JWT Filter
 //        it tell spring that : Incoming Request -> JWT Filter -> If token valid -> Spring Security ->Controller
                 .addFilterBefore(jwtAuthentictionFilter, UsernamePasswordAuthenticationFilter.class);

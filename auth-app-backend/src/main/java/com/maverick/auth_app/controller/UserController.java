@@ -1,10 +1,12 @@
 package com.maverick.auth_app.controller;
 
+import com.maverick.auth_app.config.AppConstant;
 import com.maverick.auth_app.dtos.UserDtos;
 import com.maverick.auth_app.services.Impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -31,6 +33,8 @@ public class UserController {
     public ResponseEntity<UserDtos> getUserByEmail(@RequestParam String emailId) {
         return ResponseEntity.ok(userService.getUserByEmail(emailId));
     }
+
+    @PreAuthorize("hasRole('"+ AppConstant.ADMIN_ROLE+"')")
     @GetMapping("/get-user")
     public ResponseEntity<UserDtos> getUserByUserId(@RequestParam String userId) {
         return ResponseEntity.ok(userService.getUserById(userId));

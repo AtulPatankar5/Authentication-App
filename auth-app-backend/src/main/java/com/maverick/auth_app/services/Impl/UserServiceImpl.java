@@ -1,10 +1,13 @@
 package com.maverick.auth_app.services.Impl;
 
+import com.maverick.auth_app.config.AppConstant;
 import com.maverick.auth_app.dtos.UserDtos;
 import com.maverick.auth_app.entities.Provider;
+import com.maverick.auth_app.entities.Role;
 import com.maverick.auth_app.entities.User;
 import com.maverick.auth_app.exceptions.ResourceNotFoundException;
 import com.maverick.auth_app.helpers.UserHelper;
+import com.maverick.auth_app.repositories.RoleRepository;
 import com.maverick.auth_app.repositories.UserRepository;
 import com.maverick.auth_app.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.UUID;
 
 @Service
@@ -22,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
     private final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -37,6 +42,17 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDtos, User.class);
 
         user.setProvider(userDtos.getProvider() != null ? userDtos.getProvider() : Provider.LOCAL);
+
+        Role role = roleRepository
+                .findByName("ROLE_" + AppConstant.GUEST_ROLE)
+                .orElseThrow(() -> new ResourceNotFoundException("Guest role not found"));
+
+        if (user.getRoles() == null) {
+            user.setRoles(new HashSet<>());
+        }
+
+        user.getRoles().add(role);
+        user.setEnable(true);
 
         User savedUser = userRepo.save(user);
 
@@ -76,10 +92,10 @@ public class UserServiceImpl implements UserService {
         }
 
         oldUser.setUpdatedAt(Instant.now());
-        User updatedUser  = userRepo.save(oldUser);
+        User updatedUser = userRepo.save(oldUser);
 
 
-        return modelMapper.map(updatedUser , UserDtos.class);
+        return modelMapper.map(updatedUser, UserDtos.class);
     }
 
     @Transactional

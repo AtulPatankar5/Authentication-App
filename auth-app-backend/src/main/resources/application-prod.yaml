@@ -1,2 +1,87 @@
 server:
-  port: 8083
+  port: 8082
+
+
+
+#database connection
+spring:
+  #  security:
+  #    user:
+  #      name: admin
+  #      password: 112233
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      #      pool-name: HikariCP
+      #      maximum-pool-size: 5
+      #      connection-timeout: 10000
+      #      idle-timeout: 600000
+      #      max-lifetime: 1800000
+      #      validation-timeout: 1800000
+      #      leak-detection-threshold: 0
+      initialization-fail-timeout: 0
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+        highlight_sql: true
+
+
+
+
+
+  #      DIALECT AUTO DETECTED
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:test-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:test-client-secret}
+            #/login/oauth2/code/google
+            #           Kigin to goggle using this:  http://localhost:8081/oauth2/authorization/google
+            scope:
+              - email
+              - profile
+              - openid
+          github:
+            client-id: ${GITHUB_CLIENT_ID:test-client-id} #Ov23li4WG01291u4mLfk
+            client-secret: ${GITHUB_CLIENT_SECRET:test-client-secret} #ba072d15514cc5438b100ca181f66697f63ee193
+            #            redirect-uri: {baseUrl}/login/oauth2/code/{registrationId}
+            #/login/oauth2/code/github`
+            #            run using this to connect -> http://localhost:8081/oauth2/authorization/github
+            scope:
+              - user:email
+              - read:user
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:Q8mX2vLp9RtY5NkWa3JhZ7UcPdE4FsBgLmV1CyHxKoTi6QrNe8AwJuXfMsDbPzYg}
+    issuer: ${JWT_ISSUER:api.substring.com}
+    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:600}
+    refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS:1200}
+    refresh-token-cookie-name: ${JWT_REFRESH_COOKIE_NAME:refreshToken}
+    cookie-secure: ${JWT_COOKIE_SECURE:true}
+    cookie-http-only: ${JWT_COOKIE_HTTP_ONLY:true}
+    cookie-same-site: ${JWT_COOKIE_SAME_SITE:lax}
+    cookie-domain: ${JWT_COOKIE_DOMAIN:localhost}
+
+app:
+  cors:
+    front-end-url: ${FRONT_END_URL:http://localhost:5173,http://localhost:5174}
+  auth:
+    frontend:
+      success-redirect: ${FRONT_END_SUCCESS_REDIRECT:http://localhost:5173/oauth/success}
+      failure-redirect: ${FRONT_END_FAILURE_REDIRECT:http://localhost:5173/oauth/failure}
+
+
+
