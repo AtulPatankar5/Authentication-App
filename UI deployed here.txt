@@ -1,0 +1,10 @@
+UI deployed here
+ 
+https://authenticationapps.netlify.app/
+
+
+
+Steps to run backend in docker 
+1. create Dockerfile
+2. docker build -t auth-boot-app .
+3. docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod -e DB_URL=jdbc:mysql://host.docker.internal:3306/auth_app -e DB_USERNAME=root -e DB_PASSWORD=root auth-boot-app
