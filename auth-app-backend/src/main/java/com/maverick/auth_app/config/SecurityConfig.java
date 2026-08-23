@@ -54,6 +54,7 @@ public class SecurityConfig {
                                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(AppConstant.AUTH_PUBLIC_URLS).permitAll()
                                 .requestMatchers(HttpMethod.GET).hasRole(AppConstant.GUEST_ROLE)   // Only users with the GUEST role can access GET requests
+                                .requestMatchers(HttpMethod.PUT).hasRole(AppConstant.GUEST_ROLE)   // Only users with the GUEST role can access PUT requests
                                 .requestMatchers("/api/v1/user/**").hasRole(AppConstant.ADMIN_ROLE)   // All endpoints under /api/v1/user/** can be accessed only by ADMIN
                                 .anyRequest().authenticated()
                 )

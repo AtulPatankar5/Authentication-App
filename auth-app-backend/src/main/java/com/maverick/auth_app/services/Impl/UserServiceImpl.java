@@ -11,7 +11,11 @@ import com.maverick.auth_app.repositories.RoleRepository;
 import com.maverick.auth_app.repositories.UserRepository;
 import com.maverick.auth_app.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 
@@ -60,7 +65,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value="user", key="#email")
     public UserDtos getUserByEmail(String email) {
+        log.info("(CACHE MISS) getting product info from DB for id=>", email);
 
         User user = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found with given Email Id"));
         return modelMapper.map(user, UserDtos.class);
@@ -68,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value="user", key="#userId")
     public UserDtos updateUser(UserDtos userDtos, String userId) {
         User oldUser = userRepo.findById(UserHelper.parseToUUID(userId)).orElseThrow(() -> new ResourceNotFoundException("User not Found with given ID"));
 
@@ -107,6 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value="user", key="#userId")
     public UserDtos getUserById(String userId) {
         UUID uuid = UserHelper.parseToUUID(userId);
         User user = userRepo.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
@@ -114,8 +123,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value="user", key="'allUsers'")
     public Iterable<UserDtos> getAllUsers() {
-
+    log.info("Getting all Users details from DB");
         return userRepo.findAll().
                 stream().
                 map(user -> modelMapper.map(user, UserDtos.class)).

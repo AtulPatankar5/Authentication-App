@@ -39,7 +39,12 @@ spring:
 
   #      DIALECT AUTO DETECTED
 
-
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    .type: REDIS
   security:
     oauth2:
       client:
